@@ -46,4 +46,30 @@ router.get('/contatos', async (req, res) => {
 
 });
 
-export default router;
+router.delete('/contato', async (req, res) => {
+
+    const {name} = req.query;
+    if (!name) {
+        res.status(400).json({error: 'Nome é obrigatório'});
+        return;
+    }
+
+    let list: string[] = [];
+    try {
+        const data = await promises.readFile(dataSource, 'utf8');
+        list = data.split('\n');
+    } catch (err) {
+        console.error(err);
+    }
+
+    list = list.filter(item => item.toLowerCase() !== (name as string).toLowerCase());
+
+    await promises.writeFile(dataSource, list.join('\n'));
+
+    res.json({ contato: name });
+
+
+  
+});
+
+export default router
