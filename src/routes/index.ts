@@ -32,4 +32,18 @@ router.post('/contato', async (req, res) => {
 
 } );
 
+router.get('/contatos', async (req, res) => {
+
+    let list: string[] = [];
+    try {
+        const data = await promises.readFile(dataSource, 'utf8');
+        list = data.split('\n');
+    } catch (err) {
+        console.error(err);
+    }
+
+    res.json({contatos: list});
+
+});
+
 export default router;
